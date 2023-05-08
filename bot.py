@@ -41,12 +41,6 @@ async def dog(ctx):
 async def cat(ctx):
     await ctx.send(F"喵")                                          
 
-@bot.command()                                                                        #本地圖片(波奇)
-async def bocchi(ctx):
-    random_pic = random.choice(jdata['pic'])
-    pic = discord.File(random_pic)
-    await ctx.send(file= pic)
-
 @bot.command()                                                                        #網路圖片(喜多)
 async def kita(ctx):
     random_pic = random.choice(jdata['url_pic'])
@@ -61,6 +55,17 @@ async def food(ctx):
 async def food_premium(ctx):
     random_dinnerpremium = random.choice(jdata['dinner_premium'])
     await ctx.send(random_dinnerpremium)
+
+@bot.command()                                                                        #擲骰子                                                                    
+async def dice(ctx):
+    random_dice = random.choice(jdata['dice_random'])
+    await ctx.send(F"上帝真的會擲骰子") 
+    await ctx.send(random_dice)
+
+@bot.command()                                                                        #上帝不會擲骰子                                                                    
+async def dice_god(ctx):
+    await ctx.send(F"上帝不會擲骰子")
+    await ctx.send(F"6")        
 
 @bot.event
 async def on_message(message):                                                        #關鍵字觸發訊息(老大、走啊)
@@ -121,7 +126,10 @@ async def on_message(message):                                                  
         await message.channel.send('操機掰ㄘㄨㄚˋ英文   ㄘㄨㄚˋ英文操機掰')
 
     if 'ㄘㄨㄚˋ' in message.content:
-        await message.channel.send('操機掰ㄘㄨㄚˋ英文   ㄘㄨㄚˋ英文操機掰')                
+        await message.channel.send('操機掰ㄘㄨㄚˋ英文   ㄘㄨㄚˋ英文操機掰')
+
+    if message.content == '你好':
+        await message.channel.send('哈囉')                     
 
     await bot.process_commands(message)
 
