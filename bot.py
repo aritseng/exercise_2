@@ -18,12 +18,12 @@ async def on_ready():
 @bot.event                                                                            #歡迎成員加入
 async def on_member_join(member):
     channel = bot.get_channel(int(jdata['Welcome_channel']))
-    await channel.send(F"{member} 歡迎加入!")
+    await channel.send(F"{member} 黨歡迎你!")
 
 @bot.event                                                                            #成員離開
 async def on_member_remove(member):
     channel = bot.get_channel(int(jdata['Leave_channel']))
-    await channel.send(F"{member} 已離開!")
+    await channel.send(F"{member} 已離開! 這就是ㄘㄨㄚˋ執政的下場")
 
 @bot.command()                                                                        #測試ping值
 async def ping(ctx):
@@ -75,6 +75,12 @@ async def on_message(message):                                                  
     if '原神' in message.content:
         await message.channel.send('不要跟我說那破爛遊戲')
 
+    if '週本' in message.content:
+        await message.channel.send('不要跟我說那破爛遊戲')
+
+    if '納西妲' in message.content:
+        await message.channel.send('不要跟我說那破爛遊戲')        
+
     if '吃' in message.content:
         await message.channel.send('吃你大頭') 
 
@@ -85,19 +91,37 @@ async def on_message(message):                                                  
         await message.channel.send('老大氣到不想說話了') 
 
     if 'lol' in message.content:
-        await message.channel.send('鄭學志你到底有沒有要來打') 
+        await message.channel.send('鄭學志你他媽到底有沒有要來打') 
 
     if '躲' in message.content:
         await message.channel.send('玩躲貓貓囉')   
 
-    if '喜多' in message.content:
+    if  message.content == '喜多':
         await message.channel.send('我老婆')
 
     if '三小' in message.content:
         await message.channel.send('問老大')
 
     if '啥' in message.content:
-        await message.channel.send('問老大')     
+        await message.channel.send('問老大')
+
+    if '九妹' in message.content:
+        await message.channel.send('割韭菜')
+
+    if '...' in message.content:
+        await message.channel.send('林宗憶你看不起我是不是')
+
+    if '蔡' in message.content:
+        await message.channel.send('操機掰ㄘㄨㄚˋ英文   ㄘㄨㄚˋ英文操機掰')
+
+    if '菜' in message.content:
+        await message.channel.send('操機掰ㄘㄨㄚˋ英文   ㄘㄨㄚˋ英文操機掰')
+
+    if '民進黨' in message.content:
+        await message.channel.send('操機掰ㄘㄨㄚˋ英文   ㄘㄨㄚˋ英文操機掰')
+
+    if 'ㄘㄨㄚˋ' in message.content:
+        await message.channel.send('操機掰ㄘㄨㄚˋ英文   ㄘㄨㄚˋ英文操機掰')                
 
     await bot.process_commands(message)
 
