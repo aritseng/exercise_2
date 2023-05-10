@@ -18,12 +18,15 @@ async def on_ready():
 @bot.event                                                                            #歡迎成員加入
 async def on_member_join(member):
     channel = bot.get_channel(int(jdata['Welcome_channel']))
-    await channel.send(F"{member} 黨歡迎你!")
+    await channel.send(F"{member}")
+    await channel.send(F"黨歡迎你加入")
 
 @bot.event                                                                            #成員離開
 async def on_member_remove(member):
     channel = bot.get_channel(int(jdata['Leave_channel']))
-    await channel.send(F"{member} 已離開! 這就是ㄘㄨㄚˋ執政的下場")
+    await channel.send(F"{member}")
+    await channel.send(F"已離開! 這就是ㄘㄨㄚˋ執政的下場")
+
 
 @bot.command()                                                                        #測試ping值
 async def ping(ctx):
@@ -45,6 +48,16 @@ async def cat(ctx):
 async def kita(ctx):
     random_pic = random.choice(jdata['url_pic'])
     await ctx.send(random_pic)
+
+@bot.command()                                                                        #網路圖片(虹夏)
+async def nijika(ctx):
+    random_pic2 = random.choice(jdata['url_pic2'])
+    await ctx.send(random_pic2)
+
+@bot.command()                                                                        #網路圖片(虹夏)
+async def bocchi(ctx):
+    random_pic3 = random.choice(jdata['url_pic3'])
+    await ctx.send(random_pic3)    
 
 @bot.command()                                                                        #晚餐隨機功能
 async def food(ctx):
@@ -129,7 +142,17 @@ async def on_message(message):                                                  
         await message.channel.send('操機掰ㄘㄨㄚˋ英文   ㄘㄨㄚˋ英文操機掰')
 
     if message.content == '你好':
-        await message.channel.send('哈囉')                     
+        await message.channel.send('哈囉')
+
+    if '烤肉' in message.content:
+        await message.channel.send('豪生你他媽是有沒有要烤肉')
+
+    if '星爆' in message.content:
+        await message.channel.send('快...還要更快...')
+        await message.channel.send('https://i.ytimg.com/vi/yAitBgZwkDQ/maxresdefault.jpg')
+
+    if '幫我撐十秒' in message.content:
+        await message.channel.send('那是什麼招式啊')                                 
 
     await bot.process_commands(message)
 
@@ -140,7 +163,30 @@ async def sayd(ctx,*,message):
 
 @bot.command()                                                                        #清理訊息
 async def clean(ctx,num:int):
-    await ctx.channel.purge(limit=num+1)  
+    await ctx.channel.purge(limit=num+1)
+
+@bot.command()                                                                        #關於機器人
+async def about(ctx):
+    embed=discord.Embed(title="about", url="https://youtu.be/dQw4w9WgXcQ", description="about the bot", color=0xf202a6)
+    embed.set_author(name="波奇醬", url="https://youtu.be/dQw4w9WgXcQ", icon_url="https://memeprod.ap-south-1.linodeobjects.com/user-template/e07d50327828a93c4098ef5432d6d564.png")
+    embed.set_thumbnail(url="https://memeprod.ap-south-1.linodeobjects.com/user-template/e07d50327828a93c4098ef5432d6d564.png")
+    embed.add_field(name="晚餐功能(宜蘭限定)", value="*food", inline=True)
+    embed.add_field(name="晚餐功能(豪華版)", value="*food_premium", inline=True)
+    embed.add_field(name="測試ping值", value="*ping", inline=True)
+    embed.add_field(name="你位於什麼頻道", value="*here", inline=True)
+    embed.add_field(name="生成喜多圖片", value="*kita", inline=True)
+    embed.add_field(name="生成虹夏圖片", value="*nijika", inline=True)
+    embed.add_field(name="生成小孤獨圖片", value="*bocchi", inline=True)
+    embed.add_field(name="擲骰子", value="*dice", inline=True)
+    embed.add_field(name="上帝不會擲骰子", value="*dice_god", inline=True)
+    embed.add_field(name="用機器人說話", value="*sayd [你要說的話]", inline=True)
+    embed.add_field(name="清理訊息", value="*clean [數字]", inline=True)
+    embed.add_field(name="天氣功能(開發中)", value="*weather", inline=True)
+    embed.add_field(name="地震功能(開發中)", value="*earthquake", inline=True)
+    embed.add_field(name="SAO冒險功能(開發中)", value="*link_start", inline=True)
+    embed.add_field(name="關鍵字自動回覆", value="你好、老大、走啊、星爆、原神、吃、九妹、菜", inline=True)
+    embed.set_footer(text="指令功能")
+    await ctx.send(embed=embed)  
      
 
 bot.run(jdata['TOKEN'])
