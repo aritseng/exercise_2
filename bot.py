@@ -1,12 +1,16 @@
 import discord
 from discord.ext import commands
 import json
-import random 
+import random  
+import requests
 
 with open('setting.json','r',encoding='utf8') as jfile:
     jdata = json.load(jfile) 
 
 bot = commands.Bot(command_prefix="*",intents=discord.Intents.all())                  #指令*
+
+api_key = "6e3d8a4744b3820fd9de4b3a9bfa3c60"
+base_url = "http://api.openweathermap.org/data/2.5/weather?"
 
 @bot.event
 #當機器人完成啟動時
@@ -15,6 +19,7 @@ async def on_ready():
     game = discord.Game('跟老大躲貓貓')                                                #設定機器人狀態
     await bot.change_presence(status=discord.Status.online, activity=game)            #discord.Status.<狀態>，可以是online,offline,idle,dnd,invisible
 
+"""
 @bot.event                                                                            #歡迎成員加入
 async def on_member_join(member):
     channel = bot.get_channel(int(jdata['Welcome_channel']))
@@ -26,7 +31,7 @@ async def on_member_remove(member):
     channel = bot.get_channel(int(jdata['Leave_channel']))
     await channel.send(F"{member}")
     await channel.send(F"已離開! 這就是ㄘㄨㄚˋ執政的下場")
-
+"""
 
 @bot.command()                                                                        #測試ping值
 async def ping(ctx):
@@ -54,7 +59,7 @@ async def nijika(ctx):
     random_pic2 = random.choice(jdata['url_pic2'])
     await ctx.send(random_pic2)
 
-@bot.command()                                                                        #網路圖片(虹夏)
+@bot.command()                                                                        #網路圖片(波奇)
 async def bocchi(ctx):
     random_pic3 = random.choice(jdata['url_pic3'])
     await ctx.send(random_pic3)    
@@ -78,10 +83,41 @@ async def dice(ctx):
 @bot.command()                                                                        #上帝不會擲骰子                                                                    
 async def dice_god(ctx):
     await ctx.send(F"上帝不會擲骰子")
-    await ctx.send(F"6")        
+    await ctx.send(F"6")     
 
-@bot.event
-async def on_message(message):                                                        #關鍵字觸發訊息(老大、走啊)
+@bot.command()                                                                        #即時天氣
+async def weather(ctx, *, city: str):
+    city_name = city
+    complete_url = base_url + "appid=" + api_key + "&q=" + city_name
+    response = requests.get(complete_url)
+    x = response.json()
+    channel = ctx.message.channel
+    if x["cod"] != "404":
+        async with channel.typing():
+            y = x["main"]
+            current_temperature = y["temp"]
+            current_temperature_celsiuis = str(round(current_temperature - 273.15))
+            current_pressure = y["pressure"]
+            current_humidity = y["humidity"]
+            z = x["weather"]
+            weather_description = z[0]["description"]
+            weather_description = z[0]["description"]
+            embed = discord.Embed(title=f"{city_name} 目前的天氣",
+                              color=ctx.guild.me.top_role.color,
+                              timestamp=ctx.message.created_at,)
+            embed.add_field(name="概況", value=f"**{weather_description}**", inline=False)
+            embed.add_field(name="氣溫(°C)", value=f"**{current_temperature_celsiuis}°C**", inline=False)
+            embed.add_field(name="濕度(%)", value=f"**{current_humidity}%**", inline=False)
+            embed.add_field(name="氣壓(hPa)", value=f"**{current_pressure}hPa**", inline=False)
+            embed.set_thumbnail(url="https://i.ibb.co/CMrsxdX/weather.png")
+            embed.set_footer(text=f"Requested by {ctx.author.name}")
+        await channel.send(embed=embed)
+    else:
+        await channel.send("City not found.")   
+
+"""
+@bot.event                                                      #關鍵字觸發訊息(老大、走啊)
+async def on_message(message):                                                       
     if message.author == bot.user:
         return
     if '老大' in message.content:
@@ -155,6 +191,7 @@ async def on_message(message):                                                  
         await message.channel.send('那是什麼招式啊')                                 
 
     await bot.process_commands(message)
+"""
 
 @bot.command()                                                                        #覆誦+刪除訊息
 async def sayd(ctx,*,message):
@@ -181,10 +218,9 @@ async def about(ctx):
     embed.add_field(name="上帝不會擲骰子", value="*dice_god", inline=True)
     embed.add_field(name="用機器人說話", value="*sayd [你要說的話]", inline=True)
     embed.add_field(name="清理訊息", value="*clean [數字]", inline=True)
-    embed.add_field(name="天氣功能(開發中)", value="*weather", inline=True)
+    embed.add_field(name="天氣功能", value="*weather [城市]", inline=True)
     embed.add_field(name="地震功能(開發中)", value="*earthquake", inline=True)
     embed.add_field(name="SAO冒險功能(開發中)", value="*link_start", inline=True)
-    embed.add_field(name="關鍵字自動回覆", value="你好、老大、走啊、星爆、原神、吃、九妹、菜", inline=True)
     embed.set_footer(text="指令功能")
     await ctx.send(embed=embed)  
      
